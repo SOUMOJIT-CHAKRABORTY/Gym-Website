@@ -7,17 +7,21 @@ import useMediaQuery from "@/hooks/useMediaQuery";
 import ActionButton from "@/shared/ActionButton";
 
 type Props = {
+  isTopOfPage: boolean;
   pageSelected: SelectedPage;
   setPageSelected: (val: SelectedPage) => void;
 };
 
-const Navbar = ({ pageSelected, setPageSelected }: Props) => {
+const Navbar = ({ isTopOfPage, pageSelected, setPageSelected }: Props) => {
   const [isMenuToggled, setIsMenuToggled] = useState<boolean>(false);
   const flexBetween = "flex items-center justify-between";
   const isAboveMediumScreens = useMediaQuery("(min-width: 1060px)");
+  const navbarBackground = isTopOfPage ? "" : "bg-primary-100 drop-shadow";
   return (
     <nav>
-      <div className={`${flexBetween} fixed top-0 z-30 w-full py-6`}>
+      <div
+        className={`${navbarBackground}${flexBetween} fixed top-0 z-30 w-full py-6`}
+      >
         <div className={`${flexBetween} mx-auto w-5/6`}>
           {/* Left Side */}
           <div className={`${flexBetween} w-full gap-16`}>
@@ -25,8 +29,8 @@ const Navbar = ({ pageSelected, setPageSelected }: Props) => {
           </div>
           {/* Right Side */}
           {isAboveMediumScreens ? (
-            <div className={`${flexBetween} w-full`}>
-              <div className={`${flexBetween} gap-8 text-sm`}>
+            <div className={`${flexBetween}  w-full`}>
+              <div className={`${flexBetween} mr-5 gap-8 text-sm`}>
                 <Link
                   page="Home"
                   pageSelected={pageSelected}
@@ -49,7 +53,7 @@ const Navbar = ({ pageSelected, setPageSelected }: Props) => {
                 />
               </div>
               <div className={`${flexBetween} gap-8 text-sm`}>
-                <p>sign in</p>
+                <p>Sign In</p>
                 <ActionButton setPageSelected={setPageSelected}>
                   Become a member
                 </ActionButton>
@@ -65,6 +69,40 @@ const Navbar = ({ pageSelected, setPageSelected }: Props) => {
           )}
         </div>
       </div>
+      {/* Mobile Menu Modal */}
+      {!isAboveMediumScreens && isMenuToggled && (
+        <div className="fixed bottom-0 right-0 z-40 h-full w-[300px] bg-primary-100 drop-shadow-xl">
+          {/* CLOSE ICON */}
+          <div className="flex justify-end p-12">
+            <button onClick={() => setIsMenuToggled(!isMenuToggled)}>
+              <XMarkIcon className="h-6 w-6 text-gray-400" />
+            </button>
+          </div>
+          {/* MENU ITEMS */}
+          <div className="ml-[33%] flex flex-col gap-10 text-2xl">
+            <Link
+              page="Home"
+              pageSelected={pageSelected}
+              setPageSelected={setPageSelected}
+            />
+            <Link
+              page="Benifits"
+              pageSelected={pageSelected}
+              setPageSelected={setPageSelected}
+            />
+            <Link
+              page="Our Classes"
+              pageSelected={pageSelected}
+              setPageSelected={setPageSelected}
+            />
+            <Link
+              page="Contact Us"
+              pageSelected={pageSelected}
+              setPageSelected={setPageSelected}
+            />
+          </div>
+        </div>
+      )}
     </nav>
   );
 };
